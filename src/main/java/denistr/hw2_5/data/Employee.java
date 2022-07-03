@@ -1,4 +1,4 @@
-package denistr.hw2_5.service;
+package denistr.hw2_5.data;
 
 import java.util.Objects;
 

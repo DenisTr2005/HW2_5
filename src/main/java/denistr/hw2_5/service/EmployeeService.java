@@ -1,45 +1,44 @@
 package denistr.hw2_5.service;
-
-import denistr.hw2_5.exceptions.EmployeeAlreadyAddedException;
-import denistr.hw2_5.exceptions.EmployeeNotFoundException;
-import denistr.hw2_5.exceptions.EmployeeStorageIsFullException;
+import denistr.hw2_5.data.Employee;
+import denistr.hw2_5.exception.EmployeeAlreadyAddedException;
+import denistr.hw2_5.exception.EmployeeNotFoundException;
+import denistr.hw2_5.exception.EmployeeStorageIsFullException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 @Service
 public class EmployeeService {
-    private final List<Employee> employees = new ArrayList<>();
-
-    public List<Employee> getEmployees() {
-        return employees;
+    private final Map<String, Employee> employees = new HashMap<>();
+    private final int MAX_VALUE = 10;
+    private String getKey(String firstName, String lastName) {
+        return firstName + " | " + lastName;
     }
-
+    public Collection<Employee> getEmployees() {
+        return employees.values();
+    }
     public Employee addEmployee(String firstName, String lastName)
             throws EmployeeStorageIsFullException, EmployeeAlreadyAddedException {
-        Employee employee = new Employee(firstName, lastName);
-        if (employees.size() == Integer.MAX_VALUE) {
+        String key = getKey(firstName,lastName);
+        if (employees.size() == MAX_VALUE) {
             throw new EmployeeStorageIsFullException("Массив сотрудников переполнен!");
-        } else if (employees.contains(employee)) {
+        } else if (employees.containsKey(key)) {
             throw new EmployeeAlreadyAddedException("Такой сотрудник уже есть в массиве!");
         } else {
-            employees.add(employee);
-            return employee;
+            employees.put(key,new Employee(firstName,lastName));
+            return employees.get(key);
         }
     }
-
     public Employee delEmployee(String firstName, String lastName) throws EmployeeNotFoundException {
-        Employee employee = findEmployee(firstName,lastName);
-        return employees.remove(employees.indexOf(employee));
+        return employees.remove(getKey(firstName,lastName));
     }
     public Employee findEmployee(String firstName, String lastName) throws EmployeeNotFoundException{
-        Employee employee = new Employee(firstName, lastName);
-        if (!employees.contains(employee)) {
+        String key = getKey(firstName,lastName);
+        if (!employees.containsKey(key)) {
             throw new EmployeeNotFoundException("Сотрудник не найден!");
         } else {
-            return employee;
+            return employees.get(key);
         }
     }
-
 }
