@@ -5,27 +5,34 @@ import denistr.hw2_5.exception.EmployeeNotFoundException;
 import denistr.hw2_5.exception.EmployeeStorageIsFullException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+
 @Service
 public class EmployeeService {
-    private final Map<String, Employee> employees = new HashMap<>();
+    private final Map<String, Employee> employees = new HashMap<>(Map.of(
+        "Ivanov1 Ivan", new Employee("Ivan", "Ivanov" , 5, 105_000),
+        "Ivanov2 Ivan", new Employee("Stepan", "Sidorov", 3, 90_000),
+        "Ivanov3 Ivan", new Employee("Roman", "Petrov", 3, 95_000),
+        "Ivanov4 Ivan", new Employee("Oleg", "Golubev", 5, 100_000),
+        "Ivanov5 Ivan", new Employee("Vladimir", "Sinicin", 4, 120_000),
+        "Ivanov6 Ivan", new Employee("Denis", "Abramovich", 1, 110_000),
+        "Ivanov7 Ivan", new Employee("Evgeniy", "Sokolov", 2, 115_000),
+        "Ivanov8 Ivan", new Employee("Petr", "Fedorov", 5, 115_000)));
     private final int MAX_VALUE = 10;
     private String getKey(String firstName, String lastName) {
-        return firstName + " | " + lastName;
+        return firstName + " " + lastName;
     }
     public Collection<Employee> getEmployees() {
         return Collections.unmodifiableCollection(employees.values());
     }
-    public Employee addEmployee(String firstName, String lastName)
+    public Employee addEmployee(String firstName, String lastName, int dep, int salary)
             throws EmployeeStorageIsFullException, EmployeeAlreadyAddedException {
         String key = getKey(firstName,lastName);
         if (employees.size() == MAX_VALUE) {
             throw new EmployeeStorageIsFullException("Массив сотрудников переполнен!");
         } else if (!employees.containsKey(key)) {
-            employees.put(key,new Employee(firstName,lastName));
+            employees.put(key,new Employee(firstName, lastName, dep, salary));
             return employees.get(key);
         }
         throw new EmployeeAlreadyAddedException("Такой сотрудник уже есть в массиве!");
@@ -43,5 +50,29 @@ public class EmployeeService {
             return employees.get(key);
         }
         throw new EmployeeNotFoundException("Сотрудник не найден!");
+    }
+
+    public Employee maxSalaryOfDep(int dep) {
+        return employees.values().stream()
+                .filter(e->e.getDep()==dep)
+                .max(Comparator.comparingInt(Employee::getSalary))
+                .orElseThrow(() ->new RuntimeException("Отдел " + dep + " отсутствует!"));
+    }
+    public Employee minSalaryOfDep(int dep) {
+        return employees.values().stream()
+                .filter(e->e.getDep()==dep)
+                .min(Comparator.comparingInt(Employee::getSalary))
+                .orElseThrow(() ->new RuntimeException("Отдел " + dep + " отсутствует!"));
+    }
+    public List<Employee> allDepEmployee() {
+        return employees.values().stream()
+                .sorted(Comparator.comparingInt(e -> e.getDep()))
+                .collect(Collectors.toList());
+
+    }
+    public Collection<Employee> depEmployee(int dep) {
+        return employees.values().stream()
+                .filter(e -> e.getDep() == dep)
+                .collect(Collectors.toUnmodifiableList());
     }
 }
