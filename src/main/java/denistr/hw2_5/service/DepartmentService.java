@@ -26,10 +26,8 @@ public class DepartmentService {
         return employeeService.getEmployees().stream()
                 .map(Employee::getDep)
                 .collect(Collectors.toSet())
-                .stream().toList()
                 .stream()
                 .collect(Collectors.toMap(k->k, this::depEmployee));
-
     }
     public List<Employee> depEmployee(int dep) {
         return employeeService.getEmployees().stream()
