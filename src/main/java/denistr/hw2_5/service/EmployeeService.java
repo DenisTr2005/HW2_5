@@ -8,14 +8,14 @@ import java.util.*;
 @Service
 public class EmployeeService {
     private final Map<String, Employee> employees = new HashMap<>(Map.of(
-        "Ivanov1 Ivan", new Employee("Ivan", "Ivanov" , 5, 105_000),
-        "Ivanov2 Ivan", new Employee("Stepan", "Sidorov", 3, 90_000),
-        "Ivanov3 Ivan", new Employee("Roman", "Petrov", 3, 95_000),
-        "Ivanov4 Ivan", new Employee("Oleg", "Golubev", 5, 100_000),
-        "Ivanov5 Ivan", new Employee("Vladimir", "Sinicin", 4, 120_000),
-        "Ivanov6 Ivan", new Employee("Denis", "Abramovich", 1, 110_000),
-        "Ivanov7 Ivan", new Employee("Evgeniy", "Sokolov", 2, 115_000),
-        "Ivanov8 Ivan", new Employee("Petr", "Fedorov", 5, 115_000)));
+        "Ivan Ivanov", new Employee("Ivan", "Ivanov" , 5, 105_000),
+        "Stepan Sidorov", new Employee("Stepan", "Sidorov", 3, 90_000),
+        "Roman Petrov", new Employee("Roman", "Petrov", 3, 95_000),
+        "Oleg Golubev", new Employee("Oleg", "Golubev", 5, 100_000),
+        "Vladimir Sinicin", new Employee("Vladimir", "Sinicin", 4, 120_000),
+        "Denis Abramovich", new Employee("Denis", "Abramovich", 1, 110_000),
+        "Evgeniy Sokolov", new Employee("Evgeniy", "Sokolov", 2, 115_000),
+        "Petr Fedorov", new Employee("Petr", "Fedorov", 5, 115_000)));
     private final int MAX_VALUE = 10;
     private String getKey(String firstName, String lastName) {
         return firstName + " " + lastName;
