@@ -4,10 +4,7 @@ import denistr.hw2_5.exception.EmployeeAlreadyAddedException;
 import denistr.hw2_5.exception.EmployeeNotFoundException;
 import denistr.hw2_5.exception.EmployeeStorageIsFullException;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
-import java.util.stream.Collectors;
-
 @Service
 public class EmployeeService {
     private final Map<String, Employee> employees = new HashMap<>(Map.of(
@@ -24,7 +21,7 @@ public class EmployeeService {
         return firstName + " " + lastName;
     }
     public Collection<Employee> getEmployees() {
-        return Collections.unmodifiableCollection(employees.values());
+        return new ArrayList<>(employees.values());
     }
     public Employee addEmployee(String firstName, String lastName, int dep, int salary)
             throws EmployeeStorageIsFullException, EmployeeAlreadyAddedException {
@@ -50,32 +47,5 @@ public class EmployeeService {
             return employees.get(key);
         }
         throw new EmployeeNotFoundException("Сотрудник не найден!");
-    }
-
-    public Employee maxSalaryOfDep(int dep) {
-        return employees.values().stream()
-                .filter(e->e.getDep()==dep)
-                .max(Comparator.comparingInt(Employee::getSalary))
-                .orElseThrow(() ->new RuntimeException("Отдел " + dep + " отсутствует!"));
-    }
-    public Employee minSalaryOfDep(int dep) {
-        return employees.values().stream()
-                .filter(e->e.getDep()==dep)
-                .min(Comparator.comparingInt(Employee::getSalary))
-                .orElseThrow(() ->new RuntimeException("Отдел " + dep + " отсутствует!"));
-    }
-    public Map<Integer,List<Employee>> allDepEmployee() {
-        return employees.values().stream()
-                .map(Employee::getDep)
-                .collect(Collectors.toSet())
-                .stream().toList()
-                .stream()
-                .collect(Collectors.toMap(k->k, this::depEmployee));
-
-    }
-    public List<Employee> depEmployee(int dep) {
-        return employees.values().stream()
-                .filter(e -> e.getDep() == dep)
-                .collect(Collectors.toList());
     }
 }
