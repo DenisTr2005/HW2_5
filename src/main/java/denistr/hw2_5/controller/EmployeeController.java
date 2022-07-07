@@ -5,8 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
@@ -44,10 +42,10 @@ public class EmployeeController {
         return employeeService.minSalaryOfDep(dep);
     }
     @GetMapping("/departments/all")
-    public Collection<Employee> depAll(Integer dep) {
+    public Map<Integer, List<Employee>> depAll(Integer dep) {
         if (dep == null) {
             return employeeService.allDepEmployee();
         }
-        return employeeService.depEmployee(dep);
+        return Map.of(dep,employeeService.depEmployee(dep));
     }
 }

@@ -64,15 +64,18 @@ public class EmployeeService {
                 .min(Comparator.comparingInt(Employee::getSalary))
                 .orElseThrow(() ->new RuntimeException("Отдел " + dep + " отсутствует!"));
     }
-    public List<Employee> allDepEmployee() {
+    public Map<Integer,List<Employee>> allDepEmployee() {
         return employees.values().stream()
-                .sorted(Comparator.comparingInt(e -> e.getDep()))
-                .collect(Collectors.toList());
+                .map(Employee::getDep)
+                .collect(Collectors.toSet())
+                .stream().toList()
+                .stream()
+                .collect(Collectors.toMap(k->k, this::depEmployee));
 
     }
-    public Collection<Employee> depEmployee(int dep) {
+    public List<Employee> depEmployee(int dep) {
         return employees.values().stream()
                 .filter(e -> e.getDep() == dep)
-                .collect(Collectors.toUnmodifiableList());
+                .collect(Collectors.toList());
     }
 }
