@@ -19,7 +19,7 @@ public class DepartmentController {
     public Employee minSalary(@RequestParam("dep") int dep) {
         return departmentService.minSalaryOfDep(dep);
     }
-    @GetMapping()
+    @GetMapping(path = "/all", params = "dep")
     public List<Employee> depEmployees(@RequestParam("dep") int dep) {
         return departmentService.depEmployee(dep);
     }
