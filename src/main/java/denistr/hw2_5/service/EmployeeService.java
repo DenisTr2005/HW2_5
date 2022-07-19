@@ -3,6 +3,8 @@ import denistr.hw2_5.data.Employee;
 import denistr.hw2_5.exception.EmployeeAlreadyAddedException;
 import denistr.hw2_5.exception.EmployeeNotFoundException;
 import denistr.hw2_5.exception.EmployeeStorageIsFullException;
+import denistr.hw2_5.exception.WrongEmployeeNameException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import java.util.*;
 @Service
@@ -25,6 +27,8 @@ public class EmployeeService {
     }
     public Employee addEmployee(String firstName, String lastName, int dep, int salary)
             throws EmployeeStorageIsFullException, EmployeeAlreadyAddedException {
+        firstName=checkName(firstName);
+        lastName=checkName(lastName);
         String key = getKey(firstName,lastName);
         if (employees.size() == MAX_VALUE) {
             throw new EmployeeStorageIsFullException("Массив сотрудников переполнен!");
@@ -47,5 +51,11 @@ public class EmployeeService {
             return employees.get(key);
         }
         throw new EmployeeNotFoundException("Сотрудник не найден!");
+    }
+    private String checkName(String name) throws WrongEmployeeNameException{
+        if (StringUtils.isAlpha(name)) {
+            return StringUtils.capitalize(name);
+        }
+        throw new WrongEmployeeNameException("Недопустимые символы в имени сотрудника!");
     }
 }
