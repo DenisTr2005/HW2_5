@@ -1,11 +1,11 @@
-package denistr.hw2_5.exceptions;
+package denistr.hw2_5.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class EmployeeAlreadyAddedException extends RuntimeException {
-    public EmployeeAlreadyAddedException(String message) {
+public class WrongEmployeeNameException extends RuntimeException {
+    public WrongEmployeeNameException(String message) {
         super(message);
         this.printStackTrace();
     }
