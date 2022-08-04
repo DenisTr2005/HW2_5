@@ -4,20 +4,12 @@ import denistr.hw2_5.exception.EmployeeAlreadyAddedException;
 import denistr.hw2_5.exception.EmployeeNotFoundException;
 import denistr.hw2_5.exception.EmployeeStorageIsFullException;
 import denistr.hw2_5.exception.WrongEmployeeNameException;
-import org.apache.commons.lang3.StringUtils;
+import static org.apache.commons.lang3.StringUtils.*;
 import org.springframework.stereotype.Service;
 import java.util.*;
 @Service
 public class EmployeeService {
-    private final Map<String, Employee> employees = new HashMap<>(Map.of(
-        "Ivan Ivanov", new Employee("Ivan", "Ivanov" , 5, 105_000),
-        "Stepan Sidorov", new Employee("Stepan", "Sidorov", 3, 90_000),
-        "Roman Petrov", new Employee("Roman", "Petrov", 3, 95_000),
-        "Oleg Golubev", new Employee("Oleg", "Golubev", 5, 100_000),
-        "Vladimir Sinicin", new Employee("Vladimir", "Sinicin", 4, 120_000),
-        "Denis Abramovich", new Employee("Denis", "Abramovich", 1, 110_000),
-        "Evgeniy Sokolov", new Employee("Evgeniy", "Sokolov", 2, 115_000),
-        "Petr Fedorov", new Employee("Petr", "Fedorov", 5, 115_000)));
+    private final Map<String, Employee> employees = new HashMap<>(Map.of());
     private final int MAX_VALUE = 10;
     private String getKey(String firstName, String lastName) {
         return firstName + " " + lastName;
@@ -53,8 +45,8 @@ public class EmployeeService {
         throw new EmployeeNotFoundException("Сотрудник не найден!");
     }
     private String checkName(String name) throws WrongEmployeeNameException{
-        if (StringUtils.isAlpha(name)) {
-            return StringUtils.capitalize(name);
+        if (isAlpha(name)) {
+            return capitalize(lowerCase(name));
         }
         throw new WrongEmployeeNameException("Недопустимые символы в имени сотрудника!");
     }
